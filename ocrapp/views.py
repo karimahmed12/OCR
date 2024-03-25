@@ -17,17 +17,9 @@ class OCRAPIView(APIView):
             img = cv2.imdecode(img_np_array, cv2.IMREAD_COLOR)  
             extracted_text = pytesseract.image_to_string(img)
             extracted_details = preprocess_details(extracted_text)
-            return Response({'details': extracted_details})
+            return Response({'status_patient': extracted_details['status_patient'], 'hemoglobin': extracted_details['details_OCR_CBC']['Hemoglobin']})
         else:
             return Response({'error': 'No Image Find.'}, status=400)
-
-# def preprocess_image(img):
-#     # Implement your image preprocessing logic here
-#     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-#     _, thresholded = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-#     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-#     processed_img = cv2.morphologyEx(thresholded, cv2.MORPH_CLOSE, kernel)
-#     return processed_img
 
 def preprocess_details(text):
     ranges = {
