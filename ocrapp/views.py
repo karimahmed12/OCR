@@ -49,3 +49,70 @@ def preprocess_details(text):
             status_patient = "Not Good"
 
     return {'status_patient': status_patient, 'details_OCR_CBC': extracted_details}
+
+
+
+
+
+
+
+# import easyocr
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework.parsers import MultiPartParser, FormParser
+# import numpy as np
+# import cv2
+# import re
+
+# class OCRAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
+    
+#     def post(self, request, *args, **kwargs):
+#         uploaded_image = request.FILES.get('image')
+#         if uploaded_image:
+#             image_data = uploaded_image.read() 
+#             img_np_array = np.frombuffer(image_data, np.uint8) 
+#             img = cv2.imdecode(img_np_array, cv2.IMREAD_COLOR)  
+#             extracted_text = perform_ocr(img)
+#             extracted_details = preprocess_details(extracted_text)
+#             return Response({'status_patient': extracted_details['status_patient'], 'hemoglobin': extracted_details['details_OCR_CBC']['Hemoglobin']})
+#         else:
+#             return Response({'error': 'No Image Found.'}, status=400)
+
+# def perform_ocr(image):
+#     reader = easyocr.Reader(['en'])
+#     result = reader.readtext(image)
+    
+#     extracted_text = ' '.join([text for text, _, _ in result])
+    
+#     return extracted_text
+
+
+# def preprocess_details(text):
+#     ranges = {
+#         'WBC': (4.12, 11.12),
+#         'RBC': (4.40, 6.12),
+#         'Platelet Count': (150, 400),
+#         'Hemoglobin': (13.12, 18.12),
+#     }
+#     patterns = {
+#         'WBC': r'WBC\s*Count\s*([\d.]+)',
+#         'RBC': r'RBC\s*Count\s*([\d.]+)',
+#         'Platelet Count': r'Platelet\s*Count\s*([\d.]+)',
+#         'Hemoglobin': r'Hemoglobin\s*([\d.]+)',
+#     }
+#     extracted_details = {}
+#     status_patient = "Good"
+#     for key, pattern in patterns.items():
+#         match = re.search(pattern, text, re.IGNORECASE)
+#         if match:
+#             value = float(match.group(1))
+#             extracted_details[key] = value
+#             if key in ranges:
+#                 if value < ranges[key][0] or value > ranges[key][1]:
+#                     status_patient = "Not Good"
+#         else:
+#             extracted_details[key] = None
+#             status_patient = "Not Good"
+
+#     return {'status_patient': status_patient, 'details_OCR_CBC': extracted_details}
